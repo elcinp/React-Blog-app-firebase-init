@@ -1,4 +1,4 @@
-import React, { useState,useContext, createContext } from "react";
+import React, { useState,useEffect,useContext, createContext } from "react";
 import { auth, googleProvider } from "../utils/firebaseUtil";
 
 //! Create context for autentication data
