@@ -60,6 +60,8 @@ const AuthContextProvider = ({ children }) => {
     loginWithGoogle,
   };
   //yüklenmiyorsa children a veriyi gönderme
-  return <AuthContext.Provider value={values}>{!loading && children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={values}>
+            {!loading && children}
+         </AuthContext.Provider>;
 };
 export default AuthContextProvider;
