@@ -1,11 +1,10 @@
 import React from "react";
+import Autorization from "../components/Autorization";
 
-const Register = () => {
-  return (
-    <div>
-      <h2>Register</h2>
-    </div>
-  );
+export const Login = () => {
+  return <Autorization method="Login" />;
 };
 
-export default Register;
+export const Register = () => {
+  return <Autorization method="Register" />;
+};
