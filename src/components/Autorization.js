@@ -11,7 +11,7 @@ import { useHistory } from "react-router-dom";
 import { toastSuccessNotify, toastErrorNotify } from "../utils/ToastNotify";
 import { Formik, Form } from "formik";
 import * as yup from "yup";
-import { useAuth } from "../contexts/AuthContextProvider";
+import { useAuth } from "../context/AuthContextProvider";
 import loadingGif from "../assets/loading.gif";
 import googlePng from "../assets/google.png";
 
@@ -93,17 +93,18 @@ const ValidationSchema = yup.object().shape({
 });
 
 const LoginAndRegisterForm = (props) => {
-    
-    const handleGoogleProvider = () => {
-        loginWithGoogle();
-    };
+  console.log(props);
+  const { loginWithGoogle } = useAuth();
 
+  const handleGoogleProvider = () => {
+    loginWithGoogle();
+  };
 
-    const {handleBlur,handleChange,errors,values,touched,isSubmitting} =props;
-    const classes= useStyles()
-
-return (
- <Grid container className={classes.root}>
+  const { handleBlur, handleChange, errors, values, touched, isSubmitting } =
+    props;
+  const classes = useStyles();
+  return (
+    <Grid container className={classes.root}>
       <Grid container justifyContent="center" className={classes.image}>
         <Grid item component={Paper} elevation={6} square xs={12} sm={8} md={6}>
           <Grid className={classes.paper}>
@@ -182,14 +183,14 @@ return (
         </Grid>
       </Grid>
     </Grid>
-);
-
+  );
 };
 
-const Autorization = () => {
+const Autorization = (props) => {
   const history = useHistory();
   const { signup, login, currentUser } = useAuth();
-  // const [method] = useState(props.method);
+  const [method] = useState(props.method);
+  const classes = useStyles();
 
   useEffect(() => {
     if (currentUser) {
@@ -206,8 +207,36 @@ const Autorization = () => {
           password: "",
         }}
         validationSchema={ValidationSchema}
-        onSubmit={(values, actions) => {}}
-        component={LoginAndRegisterForm}
+        onSubmit={(values, actions) => {
+          if (method === "Login") {
+            login(values.email, values.password)
+              .then(() => {
+                toastSuccessNotify(`${method} Successfully performed!`);
+                history.push("/");
+                actions.setSubmitting(false);
+              })
+              .catch((error) => {
+                toastErrorNotify(error.message);
+                actions.setSubmitting(false);
+                actions.resetForm();
+              });
+          } else {
+            signup(values.email, values.password)
+              .then(() => {
+                toastSuccessNotify(`${method} Successfully performed!`);
+                history.push("/");
+                actions.setSubmitting(false);
+              })
+              .catch((error) => {
+                toastErrorNotify(error.message);
+                actions.setSubmitting(false);
+                actions.resetForm();
+              });
+          }
+        }}
+        component={(props) => (
+          <LoginAndRegisterForm method={method} {...props} />
+        )}
       ></Formik>
     </div>
   );
