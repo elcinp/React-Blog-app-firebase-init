@@ -16,11 +16,11 @@ const AppRouter = () => {
                 <Route path="/login" component={Login}/>
                 <Route path="/register" component={Register}/>
                 <Route path="/ " exact component={Dasboard}/>
-                
-                <Route path="/profile " component={Profile}/>
-                <Route path="/new-blog " component={NewBlog}/>
-                <Route path="/update-blog " component={UpdateBlog}/>
-                <Route path="/detail " component={Detail}/>
+
+                <PrivateRouter path="/profile " component={Profile}/>
+                <PrivateRouter path="/new-blog " component={NewBlog}/>
+                <PrivateRouter path="/update-blog " component={UpdateBlog}/>
+                <PrivateRouter path="/detail " component={Detail}/>
             </Switch>
         </Router>
     )
