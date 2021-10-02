@@ -41,14 +41,28 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: "none",
     color: "black",
   },
+
+  login: {
+    padding: 10,
+    fontSize: 20,
+    color: "white",
+    textDecoration: "none",
+  },
 }));
 
 export default function Navbar() {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  let { currentUser, logout } = useAuth();
+  const history = useHistory();
 
-  const { currentUser } = useAuth();
+  //!Just for testing purpose
+  // currentUser = {
+  //   email: "a@gmailcom",
+  // };
+
+  console.log(currentUser);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -56,6 +70,15 @@ export default function Navbar() {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    setAnchorEl(null);
+    logout();
+  };
+  const handleDashboard = () => {
+    setAnchorEl(null);
+    history.push("/");
   };
 
   return (
@@ -67,12 +90,17 @@ export default function Navbar() {
             className={classes.menuButton}
             color="inherit"
             aria-label="menu"
+            onClick={handleDashboard}
           >
             <img src={cwLogo} alt="logo" className={classes.logo} />
           </IconButton>
-          <Typography variant="h6" className={classes.title}>
-            ──── <span>{"<ELCIN />"}</span> BLOG ────
-          </Typography>
+          <div className={classes.root}>
+            <Link to="/" className={classes.login}>
+              <Typography variant="h6" className={classes.title}>
+                ──── <span>{"<Clarusway IT />"}</span> BLOG ────
+              </Typography>
+            </Link>
+          </div>
 
           <div>
             <IconButton
@@ -84,7 +112,8 @@ export default function Navbar() {
             >
               <AccountCircle style={{ fontSize: "40px" }} />
             </IconButton>
-            {currentUser?.email ? (<Menu
+            {currentUser?.email ? (
+              <Menu
                 id="menu-appbar"
                 anchorEl={anchorEl}
                 anchorOrigin={{
@@ -99,13 +128,17 @@ export default function Navbar() {
                 open={open}
                 onClose={handleClose}
               >
-                <Link to="/login" className={classes.linkStyle}>
+                <Link to="/profile" className={classes.linkStyle}>
                   <MenuItem onClick={handleClose}>Profile</MenuItem>
                 </Link>
-                <Link to="/register" className={classes.linkStyle}>
-                  <MenuItem onClick={handleClose}>New</MenuItem>
+                <Link to="/new-blog" className={classes.linkStyle}>
+                  <MenuItem onClick={handleClose}>New Blog</MenuItem>
                 </Link>
-              </Menu>) : (
+                <Link to="/login" className={classes.linkStyle}>
+                  <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                </Link>
+              </Menu>
+            ) : (
               <Menu
                 id="menu-appbar"
                 anchorEl={anchorEl}
