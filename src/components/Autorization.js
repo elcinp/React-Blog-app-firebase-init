@@ -93,7 +93,9 @@ const ValidationSchema = yup.object().shape({
 });
 
 const LoginAndRegisterForm = (props) => {
-
+    const {handleBlur,handleChange,errors,values,touched,isSubmitting} =props;
+    const classes= useStyles()
+    
 return (
  <Grid container className={classes.root}>
       <Grid container justifyContent="center" className={classes.image}>
